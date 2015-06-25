@@ -1,8 +1,13 @@
 
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 
 public class JDBConnection 
@@ -21,7 +26,7 @@ public class JDBConnection
 		
 	}
 	
-	public void accessDB()
+	private void accessDB()
 	{
 		try 
 		{
@@ -45,7 +50,7 @@ public class JDBConnection
 		   	conn.setAutoCommit(false);
 
 		    stmt = conn.createStatement();
-		    ResultSet rs = stmt.executeQuery( "SELECT * FROM PRODUCT;" );
+		    ResultSet rs = stmt.executeQuery( "SELECT * FROM product;" );
 		      
 		    while ( rs.next() ) 
 		    {
@@ -63,8 +68,9 @@ public class JDBConnection
 		    }
 		    
 		    rs.close();
+		    
 		    stmt.close();
-		    conn.close();
+		    closeDB();
 		} 
 		
 		catch ( Exception e ) 
@@ -74,5 +80,79 @@ public class JDBConnection
 		}
 		    
 		System.out.println("Operation done successfully");
+	}
+	
+	public void updateStockLevel(int level, String productID)
+	{
+		try
+		{
+			accessDB();
+			System.out.println("Creating statement...");
+			stmt = conn.createStatement();
+		    String levelAsString = Integer.toString(level);
+			String com = "UPDATE product " + "SET StockLevel = " + levelAsString + " where productID= " + productID;
+			stmt.executeQuery(com);
+			
+			conn.commit();
+			
+			stmt.close();
+			closeDB();
+		}
+		catch(SQLException e)
+		{
+			System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+		    System.exit(0);
+		}
+
+	}
+	
+	public void printStockLevels() throws IOException
+	{
+		try
+		{
+			accessDB();
+			stmt = conn.createStatement();
+		    ResultSet rs = stmt.executeQuery( "SELECT * FROM product;" );
+		    
+		    File file = new File("stocklevels.txt");
+		    
+			// if file doesnt exists, then create it
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+			
+			FileWriter fw = new FileWriter(file.getAbsoluteFile());
+			BufferedWriter bw = new BufferedWriter(fw);
+			
+			while(rs.next())
+			{
+				
+			}
+			
+			bw.write("");
+			bw.close();
+ 
+			System.out.println("Done");
+		}
+		catch (SQLException se)
+		{
+			
+		}
+		
+	}
+	
+	private void closeDB()
+	{
+		try
+		{
+			if( conn != null)
+			{
+				conn.close();
+			}
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
 	}
 }
