@@ -6,24 +6,13 @@ public class Product
 	private int stockLevel;
 	private double cost;
 	private String name;
-	private static int productIDcounter = 1000;
 	
-	public Product(String name)
-	{
-		this.name = name;
-		productIDcounter++;
-		String idCount = Integer.toString(productIDcounter);
-		productID = "NBG" + idCount;
-	}
-	
-	public Product(String name, int stockLevel, int cost, String warehouseLoc)
+	public Product(String id, String name, int stockLevel, double cost)
 	{
 		this.name = name;
 		this.stockLevel = stockLevel;
 		this.cost = cost;
-		productIDcounter++;
-		String idCount = Integer.toString(productIDcounter);
-		productID = "NBG" + idCount;
+		this.productID = id;
 	}
 	
 	public void changeStockLevel(int level)

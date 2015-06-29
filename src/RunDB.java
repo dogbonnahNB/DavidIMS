@@ -3,10 +3,11 @@ public class RunDB {
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		JDBConnection connection = new JDBConnection();
+		DatabaseFunctions functions = new DatabaseFunctions();
 		try
 		{
-			connection.printStockLevels();
+			functions.readDB();
+			functions.printStockLevels();
 		}
 		catch(Exception e)
 		{
