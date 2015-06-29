@@ -1,22 +1,25 @@
 
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class JDBConnection 
 {
 
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-	static final String	DB_URL = "jdbc://localhost/nbgschema";
-	static final String USER = "username";
-	static final String PASS = "password";
+	static final String	DB_URL = "jdbc:mysql://localhost:3306/nbgardens";
+	static final String USER = "root";
+	static final String PASS = "netbuilder2015";
 	
 	private Connection conn;
 	private Statement stmt;
@@ -26,7 +29,7 @@ public class JDBConnection
 		
 	}
 	
-	private void accessDB()
+	public void accessDB()
 	{
 		try 
 		{
@@ -54,10 +57,10 @@ public class JDBConnection
 		      
 		    while ( rs.next() ) 
 		    {
-		        String id = rs.getString("id");
-		        String  name = rs.getString("name");
-		        int level  = rs.getInt("level");
-		        double cost = rs.getDouble("cost");
+		        String id = rs.getString("ProductID");
+		        String  name = rs.getString("ProductName");
+		        int level  = rs.getInt("StockLevel");
+		        double cost = rs.getDouble("ProductCost");
 		        
 		        System.out.println( "PRODUCT ID = " + id );
 		        System.out.println( "PRODUCT NAME = " + name );
@@ -80,6 +83,33 @@ public class JDBConnection
 		}
 		    
 		System.out.println("Operation done successfully");
+	}
+	
+	public void addProduct(String id, String name, int level, double cost)
+	{
+		try{
+			accessDB();
+			conn.setAutoCommit(false);
+			System.out.println("Creating statement....");	
+		    stmt = conn.createStatement();
+			
+			String command = "INSERT INTO product (ProductID, ProductName, StockLevel, ProductCost)"
+					+ " VALUES('" + id + "', '" + name + "', " + level + "," + cost + ")";
+			
+			stmt.executeUpdate(command);
+					
+			conn.commit();
+			
+			stmt.close();
+			closeDB();
+		}
+		catch(SQLException e)
+		{
+			
+		}
+		
+		System.out.println("Database updated successfully");
+		
 	}
 	
 	public void updateStockLevel(int level, String productID)
@@ -122,15 +152,28 @@ public class JDBConnection
 			}
 			
 			FileWriter fw = new FileWriter(file.getAbsoluteFile());
-			BufferedWriter bw = new BufferedWriter(fw);
+			PrintWriter pw = new PrintWriter(fw);
+			
+			DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyy HH:mm:ss");
+			Date date = new Date();
+			String date1 =  dateFormat.format(date);
+			
+			pw.println("\t\t\t" + date1 + "Report");
+			pw.println("Product ID \t\t Product Name \t\t Stock Level \t\t ProductCost");
 			
 			while(rs.next())
 			{
-				
+				String id = rs.getString("ProductID");
+		        String  name = rs.getString("ProductName");
+		        int level  = rs.getInt("StockLevel");
+		        double cost = rs.getDouble("ProductCost");
+		        
+		        pw.println(id + "\t\t\t " + name + "\t\t " + level + "\t\t\t " + cost);
 			}
 			
-			bw.write("");
-			bw.close();
+			pw.close();
+			
+			closeDB();
  
 			System.out.println("Done");
 		}
@@ -141,7 +184,7 @@ public class JDBConnection
 		
 	}
 	
-	private void closeDB()
+	public void closeDB()
 	{
 		try
 		{

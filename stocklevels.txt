@@ -1,0 +1,6 @@
+			29/06/2015 14:04:01Report
+Product ID 		 Product Name 		 Stock Level 		 ProductCost
+NB00043			 Angry Gnome		 200			 70.0
+NBG0001			 HappyGnome		 120			 49.0
+NBG0002			 Angry Gnome		 140			 49.99
+NBG0003			 DBZ Gnome		 19			 20.0
