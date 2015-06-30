@@ -6,13 +6,15 @@ public class Product
 	private int stockLevel;
 	private double cost;
 	private String name;
+	private int minimumThreshold;
 	
-	public Product(String id, String name, int stockLevel, double cost)
+	public Product(String id, String name, int stockLevel, double cost, int threshold)
 	{
 		this.name = name;
 		this.stockLevel = stockLevel;
 		this.cost = cost;
 		this.productID = id;
+		this.minimumThreshold = threshold;
 	}
 	
 	public void changeStockLevel(int level)
@@ -50,4 +52,26 @@ public class Product
 		return productID;
 	}
 	
+	public void changeMinThreshold(int min)
+	{
+		minimumThreshold = min;
+	}
+	
+	public int getMinThreshold()
+	{
+		return minimumThreshold;
+	}
+	
+	public boolean isBelowThreshold()
+	{
+		if(stockLevel < minimumThreshold)
+		{ 
+			System.out.println(returnName() + " stock is low, please reorder!");
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
 }

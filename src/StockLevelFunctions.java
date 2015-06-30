@@ -10,27 +10,27 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class DatabaseFunctions {
+public class StockLevelFunctions {
 	
 	private JDBConnection connect;
 	private Statement stmt;
 	private ArrayList<Product> productList;
 	
-	public DatabaseFunctions()
+	public StockLevelFunctions()
 	{
 		connect = new JDBConnection();
 		productList = new ArrayList<Product>();
 	}
 	
-	public void addProduct(String id, String name, int level, double cost)
+	public void addProduct(String id, String name, int level, double cost, int thresh)
 	{
 		try{
 			connect.accessDB();
 			System.out.println("Creating statement....");	
 		    stmt = connect.getConnection().createStatement();
 			
-			String command = "INSERT INTO product (ProductID, ProductName, StockLevel, ProductCost)"
-					+ " VALUES('" + id + "', '" + name + "', " + level + "," + cost + ")";
+			String command = "INSERT INTO product (ProductID, ProductName, StockLevel, ProductCost, MinimumThreshold)"
+					+ " VALUES('" + id + "', '" + name + "', " + level + "," + cost + ", " + thresh + ")";
 			
 			stmt.executeUpdate(command);
 					
@@ -49,28 +49,37 @@ public class DatabaseFunctions {
 	
 	public void updateStockLevel(int level, String productID)
 	{
+		Product p = null;
+		
+		readDB();
+		p = findProductByID(productID);
+				
 		try
 		{
 			connect.accessDB();
 			System.out.println("Creating statement...");
 			stmt = connect.getConnection().createStatement();
 		    String levelAsString = Integer.toString(level);
-			String com = "UPDATE product " + "SET StockLevel = " + levelAsString + " where productID= " + productID;
-			stmt.executeQuery(com);
+			String com = "UPDATE product " + "SET StockLevel = " + levelAsString + " where ProductID= '" + productID + "'";
+			stmt.executeUpdate(com);
 			
 			stmt.close();
-			connect.closeDB();
+			connect.closeDB();			
 		}
 		catch(SQLException e)
 		{
 			System.err.println( e.getClass().getName() + ": " + e.getMessage() );
 		    System.exit(0);
 		}
-
+		
+		p.isBelowThreshold();
+		System.out.println(p.returnName() + " stock level updated");
+		
 	}
 	
 	public void printStockLevels() throws IOException
 	{
+		readDB();
 		try
 		{
 		    
@@ -103,7 +112,7 @@ public class DatabaseFunctions {
 			
 			pw.close();
  
-			System.out.println("Done");
+			System.out.println("Product List Printed");
 		}
 		catch (IOException se)
 		{
@@ -128,15 +137,10 @@ public class DatabaseFunctions {
 		        String  name = rs.getString("ProductName");
 		        int level  = rs.getInt("StockLevel");
 		        double cost = rs.getDouble("ProductCost");
+		        int threshold = rs.getInt("MinimumThreshold");
 		        
-		        Product product = new Product(id, name, level, cost);
+		        Product product = new Product(id, name, level, cost, threshold);
 		        productList.add(product);
-		        
-		        System.out.println( "PRODUCT ID = " + id );
-		        System.out.println( "PRODUCT NAME = " + name );
-		        System.out.println( "STOCK LEVEL = " + level );
-		        System.out.println( "COST = " + cost );
-		        System.out.println();
 		        
 		    }
 		    
@@ -152,7 +156,37 @@ public class DatabaseFunctions {
 		    System.exit(0);
 		}
 		    
-		System.out.println("Operation done successfully");
+		System.out.println("Product List Updated");
+	}
+	
+	public void printAllProducts()
+	{
+		for(Product p : productList)
+		{
+			 System.out.println( "PRODUCT ID = " + p.getProductID() );
+		     System.out.println( "PRODUCT NAME = " + p.returnName() );
+		     System.out.println( "STOCK LEVEL = " + p.returnStockLevel() );
+		     System.out.println( "COST = " + p.returnCost() );
+		}
+	}
+	
+	private Product findProductByID(String id)
+	{
+		boolean isFound = false;
+		Product p = null;
+		int index = 0;
+		while(!isFound)
+		{
+			p = productList.get(index);
+			if(id.equals(p.getProductID()))
+			{
+				System.out.println(p.returnName() + " found");
+				isFound = true;			
+			}			
+			index++;
+		}
+		
+		return p;
 	}
 	
 }
