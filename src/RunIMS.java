@@ -35,21 +35,25 @@ public class RunIMS {
        // read choice
        int option = reader.nextInt();
        reader.nextLine();
+       System.out.println("");
        return option;
     }
     
     private void printAllProducts()
     {
     	functions.printAllProducts();
+    	System.out.println("");
     }
     
     private void updateStockLevel()
     {
         System.out.println("Enter Stock Quantity");
         int level = reader.nextInt();
+        reader.nextLine();
         System.out.println("Enter Product ID");
         String id = reader.nextLine();
         functions.updateStockLevel(level, id);
+        System.out.println("");
     }
     
     private void addProduct() {
@@ -60,12 +64,16 @@ public class RunIMS {
         String name = reader.nextLine();
         System.out.println("Enter Stock Level");
         int level = reader.nextInt();
+        reader.nextLine();
         System.out.println("Enter cost");
         double cost = reader.nextDouble();
-        System.out.println("Enter description");
+        reader.nextLine();
+        System.out.println("Enter the products minimum threshold");
         int thresh = reader.nextInt();
+        reader.nextLine();
         
         functions.addProduct(id, name, level, cost, thresh);
+        System.out.println("");
 	}
 
 	private void saveReport() {
@@ -73,6 +81,7 @@ public class RunIMS {
     	try
     	{
     		functions.printStockLevels();
+    		System.out.println("");
     	}
     	catch(IOException e)
     	{

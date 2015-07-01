@@ -1,7 +1,5 @@
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -15,6 +13,7 @@ public class StockLevelFunctions {
 	private JDBConnection connect;
 	private Statement stmt;
 	private ArrayList<Product> productList;
+	private static int stockReportCount = 0;
 	
 	public StockLevelFunctions()
 	{
@@ -43,7 +42,7 @@ public class StockLevelFunctions {
 			
 		}
 		
-		System.out.println("Database updated successfully");
+		System.out.println("Product Added successfully");
 		
 	}
 	
@@ -79,26 +78,23 @@ public class StockLevelFunctions {
 	
 	public void printStockLevels() throws IOException
 	{
+		if(stockReportCount == 7) {stockReportCount = 0;}
+		stockReportCount++;
 		readDB();
+		
+		FileWriter fw = new FileWriter("stocklevels" + stockReportCount +".txt");
+		
 		try
 		{
-		    
-		    File file = new File("stocklevels.txt");
-		    
-			// if file doesnt exists, then create it
-			if (!file.exists()) {
-				file.createNewFile();
-			}
-			
-			FileWriter fw = new FileWriter(file.getAbsoluteFile());
-			PrintWriter pw = new PrintWriter(fw);
 			
 			DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyy HH:mm:ss");
 			Date date = new Date();
 			String date1 =  dateFormat.format(date);
 			
-			pw.println("\t\t\t" + date1 + "Report");
-			pw.println("Product ID \t\t Product Name \t\t Stock Level \t\t ProductCost");
+			String report = "";
+			
+			report += "\t\t\t" + date1 + "Report";
+			report += "Product ID \t\t Product Name \t\t Stock Level \t\t ProductCost \r\n";
 			
 			for(Product p: productList)
 			{
@@ -107,10 +103,11 @@ public class StockLevelFunctions {
 		        int level  = p.returnStockLevel();
 		        double cost = p.returnCost();
 		        
-		        pw.println(id + "\t\t\t " + name + "\t\t " + level + "\t\t\t " + cost);
+		        report += id + "\t\t\t " + name + "\t\t " + level + "\t\t\t " + cost + "\r\n";
 			}
 			
-			pw.close();
+			fw.write(report);
+			fw.close();
  
 			System.out.println("Product List Printed");
 		}
@@ -126,6 +123,8 @@ public class StockLevelFunctions {
 	{
 		try 
 		{
+			productList.clear();
+			
 			connect.accessDB();
 			stmt = connect.getConnection().createStatement();
 			
@@ -161,32 +160,33 @@ public class StockLevelFunctions {
 	
 	public void printAllProducts()
 	{
+		readDB();
 		for(Product p : productList)
 		{
 			 System.out.println( "PRODUCT ID = " + p.getProductID() );
 		     System.out.println( "PRODUCT NAME = " + p.returnName() );
 		     System.out.println( "STOCK LEVEL = " + p.returnStockLevel() );
 		     System.out.println( "COST = " + p.returnCost() );
+		     System.out.println("");
 		}
 	}
 	
 	private Product findProductByID(String id)
 	{
-		boolean isFound = false;
 		Product p = null;
 		int index = 0;
-		while(!isFound)
+		while(index < productList.size())
 		{
 			p = productList.get(index);
 			if(id.equals(p.getProductID()))
 			{
 				System.out.println(p.returnName() + " found");
-				isFound = true;			
+				return p;		
 			}			
 			index++;
 		}
 		
-		return p;
+		return null;
 	}
 	
 }
