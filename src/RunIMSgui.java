@@ -76,6 +76,7 @@ public class RunIMSgui extends JFrame
 		String command = ae.getActionCommand();
 		switch (command) {
 		case "Add Product": 
+			
 		break;
 		case "Print Stock List": 
 			try {
