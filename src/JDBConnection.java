@@ -11,6 +11,7 @@ public class JDBConnection
 	static final String	DB_URL = "jdbc:mysql://10.50.20.16:3306/nbgardens";
 	static final String USER = "do";
 	static final String PASS = "root";
+	//winning
 	
 	private Connection conn;
 	
