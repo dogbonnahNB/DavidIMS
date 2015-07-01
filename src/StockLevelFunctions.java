@@ -119,7 +119,7 @@ public class StockLevelFunctions {
 			System.out.println("Creating statement...");
 			stmt = connect.getConnection().createStatement();
 		    String costAsString = Double.toString(cost);
-			String com = "UPDATE product " + "SET MinimumThreshold = " + costAsString + " where ProductID= '" + productID + "'";
+			String com = "UPDATE product " + "SET Cost = " + costAsString + " where ProductID= '" + productID + "'";
 			stmt.executeUpdate(com);
 			
 			stmt.close();
@@ -227,6 +227,7 @@ public class StockLevelFunctions {
 		     System.out.println( "PRODUCT NAME = " + p.returnName() );
 		     System.out.println( "STOCK LEVEL = " + p.returnStockLevel() );
 		     System.out.println( "COST = " + p.returnCost() );
+		     System.out.println( "MINIMUM THRESHOLD = " + p.getMinThreshold() );
 		     System.out.println("");
 		}
 	}

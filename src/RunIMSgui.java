@@ -32,7 +32,7 @@ public class RunIMSgui extends JFrame
 	    StockTableModel model = new StockTableModel(productList);
 		
 		JTable table = new JTable(model);
-		table.setFont(new Font("SanSerif", Font.PLAIN, 18));
+		table.setFont(new Font("SanSerif", Font.PLAIN, 16));
 		table.setRowHeight(30);
         
 		this.setSize(1280, 720);
