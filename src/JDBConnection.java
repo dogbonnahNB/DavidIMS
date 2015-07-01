@@ -10,7 +10,7 @@ public class JDBConnection
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
 	static final String	DB_URL = "jdbc:mysql://10.50.20.16:3306/nbgardens";
 	static final String USER = "do";
-	static final String PASS = "password";
+	static final String PASS = "root";
 	
 	private Connection conn;
 	
