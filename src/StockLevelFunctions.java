@@ -76,6 +76,66 @@ public class StockLevelFunctions {
 		
 	}
 	
+	public void updateMinThreshold(int thresh, String productID)
+	{
+		Product p = null;
+		
+		readDB();
+		p = findProductByID(productID);
+				
+		try
+		{
+			connect.accessDB();
+			System.out.println("Creating statement...");
+			stmt = connect.getConnection().createStatement();
+		    String threshAsString = Integer.toString(thresh);
+			String com = "UPDATE product " + "SET MinimumThreshold = " + threshAsString + " where ProductID= '" + productID + "'";
+			stmt.executeUpdate(com);
+			
+			stmt.close();
+			connect.closeDB();			
+		}
+		catch(SQLException e)
+		{
+			System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+		    System.exit(0);
+		}
+		
+		p.isBelowThreshold();
+		System.out.println(p.returnName() + "'s minimum threshold is updated");
+		
+	}
+
+	public void updateCost(double cost, String productID)
+	{
+		Product p = null;
+		
+		readDB();
+		p = findProductByID(productID);
+				
+		try
+		{
+			connect.accessDB();
+			System.out.println("Creating statement...");
+			stmt = connect.getConnection().createStatement();
+		    String costAsString = Double.toString(cost);
+			String com = "UPDATE product " + "SET MinimumThreshold = " + costAsString + " where ProductID= '" + productID + "'";
+			stmt.executeUpdate(com);
+			
+			stmt.close();
+			connect.closeDB();			
+		}
+		catch(SQLException e)
+		{
+			System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+		    System.exit(0);
+		}
+
+		System.out.println(p.returnName() + "'s cost is updated");
+		
+	}
+	
+	
 	public void printStockLevels() throws IOException
 	{
 		if(stockReportCount == 7) {stockReportCount = 0;}
@@ -93,7 +153,7 @@ public class StockLevelFunctions {
 			
 			String report = "";
 			
-			report += "\t\t\t" + date1 + "Report";
+			report += "\t\t\t" + date1 + " Report  \r\n";
 			report += "Product ID \t\t Product Name \t\t Stock Level \t\t ProductCost \r\n";
 			
 			for(Product p: productList)
@@ -187,6 +247,11 @@ public class StockLevelFunctions {
 		}
 		
 		return null;
+	}
+	
+	public ArrayList<Product> returnProductList()
+	{
+		return productList;
 	}
 	
 }

@@ -27,7 +27,7 @@ public class Product
 		return stockLevel;
 	}
 	
-	public void changeCost(int cost)
+	public void changeCost(double cost)
 	{
 		this.cost = cost;
 	}
