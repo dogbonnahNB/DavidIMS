@@ -119,7 +119,7 @@ public class StockLevelFunctions {
 			System.out.println("Creating statement...");
 			stmt = connect.getConnection().createStatement();
 		    String costAsString = Double.toString(cost);
-			String com = "UPDATE product " + "SET Cost = " + costAsString + " where ProductID= '" + productID + "'";
+			String com = "UPDATE product " + "SET ProductCost = " + costAsString + " where ProductID= '" + productID + "'";
 			stmt.executeUpdate(com);
 			
 			stmt.close();
@@ -154,7 +154,7 @@ public class StockLevelFunctions {
 			String report = "";
 			
 			report += "\t\t\t" + date1 + " Report  \r\n";
-			report += "Product ID \t\t Product Name \t\t Stock Level \t\t ProductCost \r\n";
+			report += "Product ID \t Product Name \t\t\t\t Stock Level \t\t ProductCost \r\n";
 			
 			for(Product p: productList)
 			{
@@ -163,13 +163,23 @@ public class StockLevelFunctions {
 		        int level  = p.returnStockLevel();
 		        double cost = p.returnCost();
 		        
-		        report += id + "\t\t\t " + name + "\t\t " + level + "\t\t\t " + cost + "\r\n";
+		        if (name.length() < 14)
+		        {
+		        	report += id + "\t\t " + name + "\t\t\t\t" + level + "\t\t\t " + cost + "\r\n";
+		        }
+		        else
+		        {
+		        	report += id + "\t\t " + name + "\t\t\t" + level + "\t\t\t " + cost + "\r\n";
+		        }
 			}
 			
 			fw.write(report);
 			fw.close();
  
 			System.out.println("Product List Printed");
+			
+			Runtime runtime = Runtime.getRuntime();
+			Process process = runtime.exec("C:\\Windows\\notepad.exe C:\\Users\\David\\workspace\\DavidIMS\\stocklevels" + stockReportCount +".txt");
 		}
 		catch (IOException se)
 		{

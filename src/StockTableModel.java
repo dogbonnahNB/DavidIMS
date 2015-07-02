@@ -1,12 +1,15 @@
 import java.util.List;
 
+import javax.swing.JOptionPane;
 import javax.swing.table.AbstractTableModel;
 
 @SuppressWarnings("serial")
 public class StockTableModel extends AbstractTableModel {
 
 	private StockLevelFunctions functions = new StockLevelFunctions();
-	private final List<Product> productList;
+	private List<Product> productList;
+	boolean stockLevelLow = false;
+	String stockLevelLowName = "";
     
     private final String[] columnNames = new String[] {
             "Product ID", "Name", "Product Quantity", "Cost", "Minimum Threshold"
@@ -86,6 +89,10 @@ public class StockTableModel extends AbstractTableModel {
         if(2 == columnIndex) {
             row.changeStockLevel((Integer) aValue);
             functions.updateStockLevel(row.returnStockLevel(), row.getProductID());
+            if (row.returnStockLevel() < row.getMinThreshold()) 
+            {
+            	JOptionPane.showConfirmDialog(null, row.returnName() + "'s stock level is below minimum. Please reorder!","OK", JOptionPane.WARNING_MESSAGE);
+            }
         }
         if(3 == columnIndex) {
             row.changeCost((Double) aValue);
@@ -94,6 +101,20 @@ public class StockTableModel extends AbstractTableModel {
         if(4 == columnIndex) {
         	row.changeMinThreshold((Integer) aValue);
         	functions.updateMinThreshold(row.getMinThreshold(), row.getProductID());
+        	if (row.returnStockLevel() < row.getMinThreshold())
+        	{
+            	JOptionPane.showConfirmDialog(null, row.returnName() + "'s stock level is below minimum. Please reorder!","OK", JOptionPane.WARNING_MESSAGE);
+            }
         }
     }
+    
+    public boolean add(Product p) {
+        boolean stockLevelLow = false;
+    	int rowCount = getRowCount();
+        productList.add(p);
+        functions.addProduct(p.getProductID(), p.returnName(),p.returnStockLevel(),p.returnCost(),p.getMinThreshold());
+        if (p.returnStockLevel() < p.getMinThreshold()) stockLevelLow = true;
+        fireTableRowsInserted(rowCount, rowCount);
+        return stockLevelLow;
+    }      
 }

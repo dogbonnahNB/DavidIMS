@@ -7,6 +7,7 @@ public class Product
 	private double cost;
 	private String name;
 	private int minimumThreshold;
+	private int orderQuantity;
 	
 	public Product(String id, String name, int stockLevel, double cost, int threshold)
 	{
@@ -15,6 +16,7 @@ public class Product
 		this.cost = cost;
 		this.productID = id;
 		this.minimumThreshold = threshold;
+		this.orderQuantity = 0;
 	}
 	
 	public void changeStockLevel(int level)
@@ -73,5 +75,15 @@ public class Product
 		{
 			return false;
 		}
+	}
+
+	public int orderQuantity() {
+		// TODO Auto-generated method stub
+		return orderQuantity ;
+	}
+	
+	public void orderQuantity(int order)
+	{
+		orderQuantity = order;
 	}
 }
