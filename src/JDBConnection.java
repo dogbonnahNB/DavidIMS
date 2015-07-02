@@ -8,7 +8,7 @@ public class JDBConnection
 {
 
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-	static final String	DB_URL = "jdbc:mysql://localhost:3306/nbgardens";
+	static final String	DB_URL = "jdbc:mysql://10.50.20.18:3306/nbgardens";
 	static final String USER = "root";
 	static final String PASS = "netbuilder2015";
 	//winning
