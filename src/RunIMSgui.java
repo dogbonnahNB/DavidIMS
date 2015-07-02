@@ -102,7 +102,7 @@ public class RunIMSgui extends JFrame
             if(confirmProductName == JOptionPane.YES_OPTION){
                 Product p = new Product(newProductID, newProductName, newStockLevel, newCost, newMinimum);        
                 boolean stockLevelLow = ((StockTableModel)model).add(p);
-                if (stockLevelLow) JOptionPane.showConfirmDialog(null,"Stock Level is below minimum. Please reorder!","OK", JOptionPane.WARNING_MESSAGE);
+                if (stockLevelLow) JOptionPane.showConfirmDialog(null,"Stock Level is below minimum. Please reorder!","IMS Warning", JOptionPane.WARNING_MESSAGE);
                 
                 }else{
                       JOptionPane.showMessageDialog(null, "Request cancelled");
@@ -116,7 +116,7 @@ public class RunIMSgui extends JFrame
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			JOptionPane.showMessageDialog(returnFrame(), "Stock List has been printed");
+			JOptionPane.showMessageDialog(returnFrame(), "Stock List has been printed","IMS Message", JOptionPane.PLAIN_MESSAGE);
 		break;
 		case "Generate Purchase Order": 
 			JFrame purchaseList = new PurchaseOrder();

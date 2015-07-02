@@ -91,7 +91,7 @@ public class StockTableModel extends AbstractTableModel {
             functions.updateStockLevel(row.returnStockLevel(), row.getProductID());
             if (row.returnStockLevel() < row.getMinThreshold()) 
             {
-            	JOptionPane.showConfirmDialog(null, row.returnName() + "'s stock level is below minimum. Please reorder!","OK", JOptionPane.WARNING_MESSAGE);
+            	JOptionPane.showConfirmDialog(null, row.returnName() + "'s stock level is below minimum. Please reorder!","Reorder Product", JOptionPane.WARNING_MESSAGE);
             }
         }
         if(3 == columnIndex) {

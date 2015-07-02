@@ -136,6 +136,7 @@ public class StockLevelFunctions {
 	}
 	
 	
+	@SuppressWarnings("unused")
 	public void printStockLevels() throws IOException
 	{
 		if(stockReportCount == 7) {stockReportCount = 0;}
@@ -176,10 +177,12 @@ public class StockLevelFunctions {
 			fw.write(report);
 			fw.close();
  
-			System.out.println("Product List Printed");
-			
 			Runtime runtime = Runtime.getRuntime();
 			Process process = runtime.exec("C:\\Windows\\notepad.exe C:\\Users\\David\\workspace\\DavidIMS\\stocklevels" + stockReportCount +".txt");
+			
+			System.out.println("Product List Printed");
+			
+
 		}
 		catch (IOException se)
 		{
